@@ -636,6 +636,12 @@ function updateMiniMap(lat,lon,accuracy){
 }
 
 // ═══ TRIP ═══
+function startTripSilent(){
+  if(tripActive)return;
+  tripActive=true;tripPoints=[];tripViolations=0;tripDistance=0;maxSpeed=0;prevPos=null;tripStartTime=Date.now();
+  document.getElementById('tripBtn').className='trip-btn btn-stop';
+  document.getElementById('tripBtn').textContent='■ UKONČIT JÍZDU';
+}
 function startTrip(){
   tripActive=true;tripPoints=[];tripViolations=0;tripDistance=0;maxSpeed=0;prevPos=null;tripStartTime=Date.now();
   document.getElementById('tripBtn').className='trip-btn btn-stop';
@@ -673,10 +679,17 @@ function startGPS(){
 
 function onPos(pos){
   const{latitude:lat,longitude:lon,speed,accuracy}=pos.coords;
+  const wasReady=gpsReady;
   curLat=lat;curLon=lon;gpsReady=true;
   document.getElementById('statusDot').className='status-dot active';
   document.getElementById('statusLabel').textContent='GPS';
-  if(!tripActive){document.getElementById('tripBtn').className='trip-btn btn-start';document.getElementById('tripBtn').textContent='● ZÁZNAM TRASY';}
+  if(!tripActive){
+    document.getElementById('tripBtn').className='trip-btn btn-stop';
+    document.getElementById('tripBtn').textContent='■ UKONČIT JÍZDU';
+    // Auto-start trip when moving > 5 km/h
+    const kmhAuto=speed!=null?speed*3.6:0;
+    if(kmhAuto>5)startTripSilent();
+  }
   updateSpeedUI(speed,accuracy);
   updateMiniMap(lat,lon,accuracy);
   if(tripActive){
