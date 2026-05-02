@@ -6,57 +6,52 @@
 <meta name="theme-color" content="#0a0a0f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>SpeedGuard</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <style>
-:root {
-  --bg:#0a0a0f; --surface:#12121a; --surface2:#1a1a26;
-  --accent:#00e5ff; --accent2:#7c4dff;
-  --danger:#ff1744; --warn:#ff9100; --ok:#00e676;
-  --text:#e0e0e0; --dim:#5a5a7a; --glow:rgba(0,229,255,0.3);
+:root{
+  --bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;
+  --accent:#00e5ff;--accent2:#7c4dff;
+  --danger:#ff1744;--warn:#ff9100;--ok:#00e676;
+  --text:#e0e0e0;--dim:#5a5a7a;--glow:rgba(0,229,255,0.3);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;display:flex;flex-direction:column}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
 
-/* ── PAGES ── */
-.page{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .3s}
+/* PAGES */
+.page{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .3s;overflow-y:auto;padding-bottom:72px}
 .page.active{opacity:1;pointer-events:all}
 
-/* ── TAB BAR ── */
-.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(10,10,15,.95);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);display:flex;height:64px}
+/* TABBAR */
+.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(10,10,15,.96);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);display:flex;height:64px}
 .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--dim);transition:color .2s;font-size:9px;letter-spacing:2px;text-transform:uppercase}
 .tab.active{color:var(--accent)}
-.tab-icon{font-size:20px}
+.tab-icon{font-size:19px}
 
-/* ── START SCREEN ── */
+/* START SCREEN */
 .start-screen{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:40px;transition:opacity .5s,transform .5s}
 .start-screen.hidden{opacity:0;pointer-events:none;transform:scale(1.05)}
-.start-logo{font-family:'Orbitron',monospace;font-size:28px;font-weight:900;color:var(--accent);text-shadow:0 0 40px var(--glow);letter-spacing:6px}
-.start-sub{font-size:13px;color:var(--dim);letter-spacing:2px;text-align:center}
+.start-logo{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--accent);text-shadow:0 0 40px var(--glow);letter-spacing:6px}
+.start-sub{font-size:12px;color:var(--dim);letter-spacing:2px;text-align:center}
 .start-btn{background:var(--accent);color:#000;border:none;border-radius:50px;padding:16px 48px;font-family:'Orbitron',monospace;font-size:14px;font-weight:700;letter-spacing:3px;cursor:pointer;box-shadow:0 0 30px var(--glow)}
 .start-note{font-size:11px;color:var(--dim);text-align:center;line-height:1.7;max-width:280px}
 
-/* ── ALERT BANNER ── */
+/* ALERTS */
 .alert-banner{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--danger);color:#fff;font-family:'Orbitron',monospace;font-size:13px;letter-spacing:3px;text-align:center;padding:14px;transform:translateY(-100%);transition:transform .3s}
 .alert-banner.show{transform:translateY(0)}
 .flash-overlay{position:fixed;inset:0;background:rgba(255,23,68,.12);pointer-events:none;z-index:90;opacity:0;transition:opacity .15s}
 .flash-overlay.flash{opacity:1}
-
-/* ── LIMIT ANNOUNCE ── */
-.limit-announce{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-100%);z-index:290;background:rgba(0,229,255,.15);border:1px solid var(--accent);border-radius:0 0 20px 20px;padding:10px 28px;font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;color:var(--accent);transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;text-align:center}
+.limit-announce{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-100%);z-index:290;background:rgba(0,229,255,.15);border:1px solid var(--accent);border-radius:0 0 20px 20px;padding:10px 28px;font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;color:var(--accent);transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap}
 .limit-announce.show{transform:translateX(-50%) translateY(0)}
-
-/* ── RADAR ALERT ── */
 .radar-alert{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-100%);z-index:280;background:rgba(255,145,0,.18);border:1px solid var(--warn);border-radius:0 0 20px 20px;padding:10px 28px;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:var(--warn);transition:transform .4s cubic-bezier(.34,1.56,.64,1);text-align:center;white-space:nowrap}
 .radar-alert.show{transform:translateX(-50%) translateY(64px)}
 
-/* ── MAIN PAGE ── */
-#mainPage{overflow-y:auto;padding:0 18px 80px}
-header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 8px;position:relative;z-index:1}
-.logo{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:4px;color:var(--accent);text-shadow:0 0 16px var(--glow)}
+/* MAIN */
+#mainPage{padding:0 16px 72px}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 0 8px}
+.logo{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:4px;color:var(--accent);text-shadow:0 0 16px var(--glow)}
 .gps-status{font-size:10px;letter-spacing:2px;color:var(--dim);display:flex;align-items:center;gap:6px}
 .status-dot{width:8px;height:8px;border-radius:50%;background:var(--dim);transition:all .5s}
 .status-dot.active{background:var(--ok);box-shadow:0 0 10px var(--ok)}
@@ -64,19 +59,19 @@ header{display:flex;align-items:center;justify-content:space-between;padding:16p
 .status-dot.error{background:var(--danger);box-shadow:0 0 10px var(--danger)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* Speedo */
-.speedo-wrap{display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
-.speedo-ring{position:relative;width:240px;height:240px;display:flex;align-items:center;justify-content:center}
+/* SPEEDO */
+.speedo-wrap{display:flex;flex-direction:column;align-items:center}
+.speedo-ring{position:relative;width:220px;height:220px;display:flex;align-items:center;justify-content:center}
 .speedo-ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-135deg)}
 .arc-bg{fill:none;stroke:var(--surface2);stroke-width:14;stroke-linecap:round}
 .arc-fill{fill:none;stroke:var(--accent);stroke-width:14;stroke-linecap:round;transition:stroke-dashoffset .35s cubic-bezier(.4,0,.2,1),stroke .3s;filter:drop-shadow(0 0 8px var(--accent))}
 .speedo-inner{position:relative;z-index:2;text-align:center}
-.speed-num{font-family:'Orbitron',monospace;font-size:68px;font-weight:900;line-height:1;color:#fff;text-shadow:0 0 30px rgba(255,255,255,.25);letter-spacing:-2px;transition:color .3s}
+.speed-num{font-family:'Orbitron',monospace;font-size:64px;font-weight:900;line-height:1;color:#fff;text-shadow:0 0 30px rgba(255,255,255,.25);letter-spacing:-2px;transition:color .3s}
 .speed-unit{font-size:12px;letter-spacing:4px;color:var(--dim);margin-top:2px}
 
-/* Cards */
-.limit-row{display:flex;gap:10px;width:100%;margin-top:16px}
-.card{flex:1;background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:3px;transition:border-color .3s,box-shadow .3s;cursor:default}
+/* LIMIT CARD */
+.limit-center{display:flex;justify-content:center;width:100%;margin-top:12px}
+.card{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:3px;transition:border-color .3s,box-shadow .3s}
 .card.clickable{cursor:pointer}
 .card.warn{border-color:var(--warn);box-shadow:0 0 18px rgba(255,145,0,.2)}
 .card.danger{border-color:var(--danger);box-shadow:0 0 22px rgba(255,23,68,.3);animation:dpulse .8s infinite}
@@ -85,117 +80,151 @@ header{display:flex;align-items:center;justify-content:space-between;padding:16p
 .card-val{font-family:'Orbitron',monospace;font-size:32px;font-weight:700;color:var(--text);line-height:1;transition:color .3s}
 .card-sub{font-size:10px;color:var(--dim)}
 
-/* Road info */
-.road-info{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:12px 14px;margin-top:10px;display:flex;align-items:center;gap:10px}
-.road-icon{width:34px;height:34px;background:var(--surface2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+/* ROAD INFO */
+.road-info{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:11px 13px;margin-top:10px;display:flex;align-items:center;gap:10px}
+.road-icon{width:32px;height:32px;background:var(--surface2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .road-text{flex:1;min-width:0}
-.road-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.road-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .road-type{font-size:10px;color:var(--dim);letter-spacing:1px}
 .cache-badge{font-size:8px;letter-spacing:1px;padding:3px 7px;border-radius:20px;background:rgba(124,77,255,.15);border:1px solid rgba(124,77,255,.3);color:var(--accent2);flex-shrink:0;display:none}
 
-/* Stats row */
+/* MINI MAP */
+.mini-map-wrap{border-radius:16px;overflow:hidden;margin-top:10px;position:relative;height:160px;border:1px solid rgba(255,255,255,.07)}
+#miniMap{width:100%;height:100%;background:var(--surface)}
+.map-label{position:absolute;top:8px;left:8px;z-index:1000;background:rgba(10,10,15,.8);border:1px solid rgba(0,229,255,.3);border-radius:8px;padding:4px 9px;font-size:9px;letter-spacing:2px;color:var(--accent);font-family:'Orbitron',monospace}
+
+/* RADAR INFO */
+.radar-near{background:rgba(255,145,0,.08);border:1px solid rgba(255,145,0,.2);border-radius:12px;padding:10px 13px;margin-top:8px;display:none;align-items:center;gap:10px}
+.radar-near.visible{display:flex}
+.radar-near-dist{font-family:'Orbitron',monospace;font-size:22px;font-weight:700;color:var(--warn);margin-left:auto}
+
+/* STATS ROW */
 .stats-row{display:flex;gap:8px;margin-top:10px}
-.stat{flex:1;background:var(--surface);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:10px;text-align:center}
-.stat-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--accent)}
+.stat{flex:1;background:var(--surface);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:9px;text-align:center}
+.stat-val{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--accent)}
 .stat-label{font-size:8px;letter-spacing:2px;color:var(--dim);margin-top:2px;text-transform:uppercase}
 
-/* Trip control */
-.trip-ctrl{margin-top:12px;display:flex;gap:10px;width:100%}
-.trip-btn{flex:1;padding:14px;border:none;border-radius:14px;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:transform .1s,opacity .1s;font-weight:700}
+/* TRIP BTN */
+.trip-ctrl{margin-top:10px}
+.trip-btn{width:100%;padding:14px;border:none;border-radius:14px;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:transform .1s;font-weight:700}
 .trip-btn:active{transform:scale(.97)}
 .btn-start{background:var(--ok);color:#000}
 .btn-stop{background:var(--danger);color:#fff}
 .btn-disabled{background:var(--surface2);color:var(--dim);pointer-events:none}
 
-/* Radar info */
-.radar-info{background:rgba(255,145,0,.08);border:1px solid rgba(255,145,0,.2);border-radius:12px;padding:10px 14px;margin-top:8px;display:none;align-items:center;gap:10px}
-.radar-info.visible{display:flex}
-.radar-info-text{font-size:12px;color:var(--warn)}
-.radar-info-dist{font-family:'Orbitron',monospace;font-size:20px;font-weight:700;color:var(--warn);margin-left:auto}
-
-/* Manual limit modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:400;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:400;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--surface);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:28px;width:300px;max-width:90vw}
-.modal-title{font-family:'Orbitron',monospace;font-size:13px;letter-spacing:3px;color:var(--accent);margin-bottom:20px}
-.limit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
-.limit-opt{background:var(--surface2);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;text-align:center;font-family:'Orbitron',monospace;font-size:18px;font-weight:700;cursor:pointer;transition:all .15s;color:var(--text)}
-.limit-opt:active,.limit-opt.selected{background:rgba(0,229,255,.15);border-color:var(--accent);color:var(--accent)}
+.modal{background:var(--surface);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:26px;width:300px;max-width:90vw}
+.modal-title{font-family:'Orbitron',monospace;font-size:13px;letter-spacing:3px;color:var(--accent);margin-bottom:18px}
+.limit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.limit-opt{background:var(--surface2);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;text-align:center;font-family:'Orbitron',monospace;font-size:18px;font-weight:700;cursor:pointer;transition:all .15s;color:var(--text)}
+.limit-opt.selected{background:rgba(0,229,255,.15);border-color:var(--accent);color:var(--accent)}
 .modal-actions{display:flex;gap:10px}
 .modal-btn{flex:1;padding:12px;border:none;border-radius:12px;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;font-weight:700}
 .modal-cancel{background:var(--surface2);color:var(--dim)}
 .modal-confirm{background:var(--accent);color:#000}
 
-/* ── DIARY PAGE ── */
-#diaryPage{overflow-y:auto;padding:0 18px 80px}
-.page-header{padding:20px 0 12px;display:flex;align-items:center;justify-content:space-between}
-.page-title{font-family:'Orbitron',monospace;font-size:14px;letter-spacing:4px;color:var(--accent)}
+/* SHARE MODAL */
+.share-url{background:var(--surface2);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;font-size:11px;word-break:break-all;color:var(--accent);margin-bottom:14px;line-height:1.5}
+.share-btn{width:100%;padding:13px;border:none;border-radius:12px;background:var(--accent2);color:#fff;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;font-weight:700;margin-bottom:8px}
+.share-note{font-size:10px;color:var(--dim);text-align:center;line-height:1.5}
+
+/* DIARY PAGE */
+#diaryPage{padding:0 16px 72px}
+.page-header{padding:18px 0 12px;display:flex;align-items:center;justify-content:space-between}
+.page-title{font-family:'Orbitron',monospace;font-size:13px;letter-spacing:4px;color:var(--accent)}
 .clear-btn{font-size:10px;letter-spacing:1px;color:var(--dim);background:none;border:none;cursor:pointer;padding:4px 8px}
 .trip-list{display:flex;flex-direction:column;gap:10px}
 .trip-item{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:16px;overflow:hidden;cursor:pointer;transition:border-color .2s}
 .trip-item:active{border-color:var(--accent)}
-.trip-header{padding:14px;display:flex;justify-content:space-between;align-items:flex-start}
-.trip-date{font-size:12px;color:var(--dim);letter-spacing:1px}
-.trip-duration{font-family:'Orbitron',monospace;font-size:11px;color:var(--accent)}
-.trip-stats{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.05)}
-.trip-stat{flex:1;padding:10px;text-align:center;border-right:1px solid rgba(255,255,255,.04)}
+.trip-header{padding:13px;display:flex;justify-content:space-between;align-items:flex-start}
+.trip-date{font-size:11px;color:var(--dim)}
+.trip-duration{font-family:'Orbitron',monospace;font-size:10px;color:var(--accent)}
+.trip-stats{display:flex;border-top:1px solid rgba(255,255,255,.05)}
+.trip-stat{flex:1;padding:9px;text-align:center;border-right:1px solid rgba(255,255,255,.04)}
 .trip-stat:last-child{border-right:none}
-.ts-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--text)}
-.ts-lbl{font-size:8px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-top:2px}
+.ts-val{font-family:'Orbitron',monospace;font-size:15px;font-weight:700}
+.ts-lbl{font-size:8px;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;margin-top:2px}
 .ts-warn{color:var(--warn)}
-.no-trips{text-align:center;padding:60px 20px;color:var(--dim);font-size:13px;letter-spacing:1px}
+.no-trips{text-align:center;padding:50px 20px;color:var(--dim);font-size:13px;letter-spacing:1px;line-height:2}
 
-/* ── TRIP DETAIL MODAL ── */
-.detail-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .3s}
+/* STATS PAGE */
+#statsPage{padding:0 16px 72px}
+.week-chart-wrap{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px;margin-top:12px}
+.week-chart-title{font-size:10px;letter-spacing:3px;color:var(--dim);margin-bottom:12px;text-transform:uppercase}
+#weekChart{width:100%;height:140px}
+.week-tabs{display:flex;gap:8px;margin-bottom:10px}
+.week-tab{flex:1;padding:8px;background:var(--surface2);border:1px solid rgba(255,255,255,.06);border-radius:10px;font-size:9px;letter-spacing:2px;text-align:center;cursor:pointer;color:var(--dim);transition:all .2s}
+.week-tab.active{background:rgba(0,229,255,.12);border-color:var(--accent);color:var(--accent)}
+.week-totals{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.week-total{background:var(--surface2);border-radius:12px;padding:12px;text-align:center}
+.wt-val{font-family:'Orbitron',monospace;font-size:20px;font-weight:700;color:var(--accent)}
+.wt-lbl{font-size:9px;letter-spacing:2px;color:var(--dim);margin-top:3px;text-transform:uppercase}
+
+/* RADAR LIST PAGE */
+#radarsPage{padding:0 16px 72px}
+.radar-list{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.radar-item{background:var(--surface);border:1px solid rgba(255,145,0,.15);border-radius:14px;padding:13px;display:flex;align-items:center;gap:12px}
+.radar-item-dist{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:var(--warn);min-width:60px}
+.radar-item-info{flex:1}
+.radar-item-name{font-size:13px;font-weight:600}
+.radar-item-coords{font-size:10px;color:var(--dim)}
+
+/* TRIP DETAIL */
+.detail-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .3s}
 .detail-overlay.open{opacity:1;pointer-events:all}
-.detail-header{padding:20px 20px 0;display:flex;align-items:center;gap:16px}
-.back-btn{background:var(--surface);border:none;color:var(--text);width:38px;height:38px;border-radius:12px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.detail-title{font-family:'Orbitron',monospace;font-size:13px;letter-spacing:3px;color:var(--accent)}
+.detail-header{padding:18px 18px 0;display:flex;align-items:center;gap:14px}
+.back-btn{background:var(--surface);border:none;color:var(--text);width:36px;height:36px;border-radius:11px;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.detail-title{font-family:'Orbitron',monospace;font-size:12px;letter-spacing:3px;color:var(--accent)}
 .detail-map{flex:1;min-height:0}
 #tripMap{width:100%;height:100%;background:var(--surface)}
-.detail-stats{padding:16px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.detail-stats{padding:14px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .ds{background:var(--surface);border-radius:12px;padding:10px;text-align:center}
-.ds-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--accent)}
+.ds-val{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--accent)}
 .ds-lbl{font-size:8px;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;margin-top:3px}
 
-/* offline */
+/* VOICE TOGGLE */
+.voice-row{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:10px 14px;margin-top:8px}
+.voice-label{font-size:12px;letter-spacing:1px}
+.toggle{position:relative;width:44px;height:24px;cursor:pointer}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{position:absolute;inset:0;background:var(--surface2);border-radius:12px;transition:background .3s}
+.toggle input:checked ~ .toggle-track{background:var(--accent)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:left .3s;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.toggle input:checked ~ .toggle-thumb{left:23px}
+
 .offline-badge{display:none;position:fixed;bottom:72px;right:14px;background:rgba(255,145,0,.15);border:1px solid var(--warn);color:var(--warn);font-size:8px;letter-spacing:2px;padding:5px 9px;border-radius:20px;z-index:50}
 </style>
 </head>
 <body>
 
-<!-- Start screen -->
+<!-- START -->
 <div class="start-screen" id="startScreen">
   <div class="start-logo">SPEEDGUARD</div>
   <div class="start-sub">GPS · LIMITY · RADARY · DENÍK</div>
   <div style="width:60px;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px"></div>
   <button class="start-btn" id="startBtn">SPUSTIT GPS</button>
-  <p class="start-note">Potřebuje přístup k GPS.<br>Rychlostní limity a radary načítány z OpenStreetMap a ukládány offline.</p>
+  <p class="start-note">Potřebuje přístup k GPS.<br>Limity a radary se ukládají offline pro příští jízdu.</p>
 </div>
 
-<!-- Alerts -->
+<!-- ALERTS -->
 <div class="alert-banner" id="alertBanner">⚠ PŘEKROČENÍ LIMITU</div>
 <div class="flash-overlay" id="flashOverlay"></div>
 <div class="limit-announce" id="limitAnnounce"></div>
-<div class="radar-alert" id="radarAlert">📡 RADAR ZA <span id="radarDist">—</span> M</div>
+<div class="radar-alert" id="radarAlertBanner">📡 RADAR ZA <span id="radarBannerDist">—</span> M</div>
 
-<!-- Manual limit modal -->
+<!-- LIMIT MODAL -->
 <div class="modal-overlay" id="limitModal">
   <div class="modal">
     <div class="modal-title">MANUÁLNÍ LIMIT</div>
     <div class="limit-grid">
-      <div class="limit-opt" data-v="20">20</div>
-      <div class="limit-opt" data-v="30">30</div>
-      <div class="limit-opt" data-v="40">40</div>
-      <div class="limit-opt" data-v="50">50</div>
-      <div class="limit-opt" data-v="60">60</div>
-      <div class="limit-opt" data-v="70">70</div>
-      <div class="limit-opt" data-v="80">80</div>
-      <div class="limit-opt" data-v="90">90</div>
-      <div class="limit-opt" data-v="100">100</div>
-      <div class="limit-opt" data-v="110">110</div>
-      <div class="limit-opt" data-v="120">120</div>
-      <div class="limit-opt" data-v="130">130</div>
+      <div class="limit-opt" data-v="20">20</div><div class="limit-opt" data-v="30">30</div>
+      <div class="limit-opt" data-v="40">40</div><div class="limit-opt" data-v="50">50</div>
+      <div class="limit-opt" data-v="60">60</div><div class="limit-opt" data-v="70">70</div>
+      <div class="limit-opt" data-v="80">80</div><div class="limit-opt" data-v="90">90</div>
+      <div class="limit-opt" data-v="100">100</div><div class="limit-opt" data-v="110">110</div>
+      <div class="limit-opt" data-v="120">120</div><div class="limit-opt" data-v="130">130</div>
     </div>
     <div class="modal-actions">
       <button class="modal-btn modal-cancel" id="modalCancel">ZRUŠIT</button>
@@ -204,7 +233,21 @@ header{display:flex;align-items:center;justify-content:space-between;padding:16p
   </div>
 </div>
 
-<!-- Trip detail overlay -->
+<!-- SHARE MODAL -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal">
+    <div class="modal-title">📡 SDÍLET POLOHU</div>
+    <div class="share-url" id="shareUrl">—</div>
+    <button class="share-btn" id="copyShareBtn">📋 KOPÍROVAT ODKAZ</button>
+    <button class="share-btn" style="background:var(--ok);color:#000" id="waSendBtn">💬 SDÍLET</button>
+    <p class="share-note">Odkaz otevře Google Maps s tvou aktuální polohou.<br>Pošli ho komukoli — uvidí kde jsi.</p>
+    <div style="margin-top:12px;display:flex;justify-content:center">
+      <button class="modal-btn modal-cancel" style="max-width:160px" id="shareClose">ZAVŘÍT</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRIP DETAIL -->
 <div class="detail-overlay" id="detailOverlay">
   <div class="detail-header">
     <button class="back-btn" id="detailBack">←</button>
@@ -216,16 +259,20 @@ header{display:flex;align-items:center;justify-content:space-between;padding:16p
 
 <!-- ── MAIN PAGE ── -->
 <div class="page active" id="mainPage">
+  <div style="padding:0 16px">
   <header>
     <div class="logo">SPEEDGUARD</div>
-    <div class="gps-status"><div class="status-dot" id="statusDot"></div><span id="statusLabel">ČEKÁ</span></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button onclick="openShare()" style="background:none;border:none;color:var(--dim);font-size:18px;cursor:pointer" title="Sdílet polohu">📡</button>
+      <div class="gps-status"><div class="status-dot" id="statusDot"></div><span id="statusLabel">ČEKÁ</span></div>
+    </div>
   </header>
 
   <div class="speedo-wrap">
     <div class="speedo-ring">
-      <svg viewBox="0 0 240 240">
-        <circle class="arc-bg" cx="120" cy="120" r="100" stroke-dasharray="471 157" stroke-dashoffset="0"/>
-        <circle class="arc-fill" cx="120" cy="120" r="100" id="arcFill" stroke-dasharray="471 157" stroke-dashoffset="471"/>
+      <svg viewBox="0 0 220 220">
+        <circle class="arc-bg" cx="110" cy="110" r="95" stroke-dasharray="448.5 149.5" stroke-dashoffset="0"/>
+        <circle class="arc-fill" cx="110" cy="110" r="95" id="arcFill" stroke-dasharray="448.5 149.5" stroke-dashoffset="448.5"/>
       </svg>
       <div class="speedo-inner">
         <div class="speed-num" id="speedNum">0</div>
@@ -233,39 +280,74 @@ header{display:flex;align-items:center;justify-content:space-between;padding:16p
       </div>
     </div>
 
-    <div style="display:flex;justify-content:center;width:100%;margin-top:16px">
-      <div class="card clickable" id="limitCard" title="Klepni pro manuální limit" style="min-width:140px;max-width:180px;text-align:center;align-items:center">
+    <div class="limit-center">
+      <div class="card clickable" id="limitCard" style="min-width:130px;text-align:center;align-items:center">
         <div class="card-label">Limit ✎</div>
         <div class="card-val" id="limitVal">—</div>
         <div class="card-sub" id="limitSrc">km/h</div>
       </div>
     </div>
     <div id="marginCard" style="display:none"><div id="marginVal"></div></div>
+  </div>
 
-    <div class="road-info">
-      <div class="road-icon" id="roadIcon">🛣️</div>
-      <div class="road-text">
-        <div class="road-name" id="roadName">Spouštím GPS...</div>
-        <div class="road-type" id="roadType">OSM DATA</div>
-      </div>
-      <div class="cache-badge" id="cacheBadge">CACHE</div>
-    </div>
+  <!-- Voice toggle -->
+  <div class="voice-row">
+    <span class="voice-label">🔊 Hlasové varování</span>
+    <label class="toggle">
+      <input type="checkbox" id="voiceToggle" checked>
+      <div class="toggle-track"></div>
+      <div class="toggle-thumb"></div>
+    </label>
+  </div>
 
-    <div class="radar-info" id="radarInfo">
-      <span>📡</span>
-      <div class="radar-info-text">Radar<br><small id="radarInfoName" style="color:var(--dim);font-size:10px"></small></div>
-      <div class="radar-info-dist" id="radarInfoDist">—</div>
+  <!-- Road info -->
+  <div class="road-info">
+    <div class="road-icon" id="roadIcon">🛣️</div>
+    <div class="road-text">
+      <div class="road-name" id="roadName">Spouštím GPS...</div>
+      <div class="road-type" id="roadType">OSM DATA</div>
     </div>
+    <div class="cache-badge" id="cacheBadge">CACHE</div>
+  </div>
 
-    <div class="stats-row">
-      <div class="stat"><div class="stat-val" id="accVal">—</div><div class="stat-label">GPS přesnost</div></div>
-      <div class="stat"><div class="stat-val" id="maxVal">0</div><div class="stat-label">Max km/h</div></div>
-      <div class="stat"><div class="stat-val" id="distVal">0</div><div class="stat-label">km trasy</div></div>
-    </div>
+  <!-- Mini map -->
+  <div class="mini-map-wrap">
+    <div class="map-label">LIVE MAPA</div>
+    <div id="miniMap"></div>
+  </div>
 
-    <div class="trip-ctrl">
-      <button class="trip-btn btn-start btn-disabled" id="tripBtn">● ZÁZNAM TRASY</button>
+  <!-- Nearest radar -->
+  <div class="radar-near" id="radarNear">
+    <span style="font-size:22px">📡</span>
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:600;color:var(--warn)">Radar</div>
+      <div style="font-size:10px;color:var(--dim)" id="radarNearName">—</div>
     </div>
+    <div class="radar-near-dist" id="radarNearDist">—</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val" id="accVal">—</div><div class="stat-label">GPS přesnost</div></div>
+    <div class="stat"><div class="stat-val" id="maxVal">0</div><div class="stat-label">Max km/h</div></div>
+    <div class="stat"><div class="stat-val" id="distVal">0</div><div class="stat-label">km trasy</div></div>
+  </div>
+
+  <div class="trip-ctrl">
+    <button class="trip-btn btn-disabled" id="tripBtn">● ZÁZNAM TRASY</button>
+  </div>
+  </div>
+</div>
+
+<!-- ── RADARS PAGE ── -->
+<div class="page" id="radarsPage">
+  <div class="page-header">
+    <div class="page-title">RADARY V OKOLÍ</div>
+    <span style="font-size:10px;color:var(--dim)" id="radarCount">—</span>
+  </div>
+  <div style="font-size:11px;color:var(--dim);margin-bottom:10px;letter-spacing:1px">Seřazeno podle vzdálenosti od tebe</div>
+  <div class="radar-list" id="radarList">
+    <div class="no-trips">📡 Radary se načtou po spuštění GPS</div>
   </div>
 </div>
 
@@ -278,10 +360,32 @@ header{display:flex;align-items:center;justify-content:space-between;padding:16p
   <div class="trip-list" id="tripList"></div>
 </div>
 
-<!-- Tab bar -->
+<!-- ── STATS PAGE ── -->
+<div class="page" id="statsPage">
+  <div class="page-header"><div class="page-title">STATISTIKY</div></div>
+  <div class="week-tabs">
+    <div class="week-tab active" data-metric="distance">KILOMETRY</div>
+    <div class="week-tab" data-metric="maxSpeed">MAX KM/H</div>
+    <div class="week-tab" data-metric="violations">PŘEKROČENÍ</div>
+  </div>
+  <div class="week-chart-wrap">
+    <div class="week-chart-title">POSLEDNÍCH 7 DNÍ</div>
+    <canvas id="weekChart"></canvas>
+  </div>
+  <div class="week-totals">
+    <div class="week-total"><div class="wt-val" id="wtKm">0</div><div class="wt-lbl">Celkem km</div></div>
+    <div class="week-total"><div class="wt-val" id="wtTrips">0</div><div class="wt-lbl">Jízdy</div></div>
+    <div class="week-total"><div class="wt-val" id="wtMax">0</div><div class="wt-lbl">Max km/h ever</div></div>
+    <div class="week-total"><div class="wt-val" id="wtViol">0</div><div class="wt-lbl">Překročení</div></div>
+  </div>
+</div>
+
+<!-- TABBAR -->
 <div class="tabbar">
   <div class="tab active" data-page="mainPage"><div class="tab-icon">🚗</div>JÍZDA</div>
+  <div class="tab" data-page="radarsPage"><div class="tab-icon">📡</div>RADARY</div>
   <div class="tab" data-page="diaryPage"><div class="tab-icon">📋</div>DENÍK</div>
+  <div class="tab" data-page="statsPage"><div class="tab-icon">📊</div>STATS</div>
 </div>
 
 <div class="offline-badge" id="offlineBadge">● OFFLINE – CACHE</div>
@@ -290,442 +394,361 @@ header{display:flex;align-items:center;justify-content:space-between;padding:16p
 <script>
 'use strict';
 
-// ═══════════════════════════════════════════
-//  CACHE HELPERS
-// ═══════════════════════════════════════════
-const CACHE_KEY = 'sg_speed_v3';
-const RADAR_KEY = 'sg_radars_v2';
-const DIARY_KEY = 'sg_diary_v2';
-const GRID = 0.005;
-const TTL = 7 * 86400000;
+// ═══ CACHE ═══
+const CACHE_KEY='sg_speed_v3', RADAR_KEY='sg_radars_v3', DIARY_KEY='sg_diary_v3';
+const GRID=0.005, TTL=7*864e5;
+const gj=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')}catch{return{}}};
+const sj=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}};
+function gridKey(la,lo){return`${(Math.round(la/GRID)*GRID).toFixed(4)}_${(Math.round(lo/GRID)*GRID).toFixed(4)}`}
+function getCached(la,lo){const c=gj(CACHE_KEY),e=c[gridKey(la,lo)];if(!e||Date.now()-e.ts>TTL)return null;return e}
+function setCached(la,lo,d){const c=gj(CACHE_KEY);c[gridKey(la,lo)]={...d,ts:Date.now()};const ks=Object.keys(c);if(ks.length>2000)ks.sort((a,b)=>c[a].ts-c[b].ts).slice(0,500).forEach(k=>delete c[k]);sj(CACHE_KEY,c)}
 
-const gj = k => { try { return JSON.parse(localStorage.getItem(k) || '{}'); } catch { return {}; } };
-const sj = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+// ═══ ROAD DATA ═══
+const ROAD_DEF={motorway:130,motorway_link:80,trunk:110,trunk_link:70,primary:90,primary_link:70,secondary:90,secondary_link:70,tertiary:90,tertiary_link:70,unclassified:90,residential:30,service:20,living_street:20,track:30,road:50};
+const ROAD_ICONS={motorway:'🛣️',trunk:'🛤️',primary:'🚗',secondary:'🚗',tertiary:'🏘️',residential:'🏡',service:'🅿️',living_street:'👣',track:'🌿'};
+const ROAD_CZ={motorway:'Dálnice',motorway_link:'Nájezd D',trunk:'Rychl. silnice',trunk_link:'Nájezd',primary:'Silnice I. třídy',primary_link:'Odbočka',secondary:'Silnice II. třídy',secondary_link:'Odbočka',tertiary:'Silnice III. třídy',tertiary_link:'Odbočka',residential:'Obytná zóna',unclassified:'Místní komunikace',service:'Účelová kom.',living_street:'Pěší zóna',track:'Polní cesta'};
 
-function gridKey(lat, lon) {
-  return `${(Math.round(lat/GRID)*GRID).toFixed(4)}_${(Math.round(lon/GRID)*GRID).toFixed(4)}`;
-}
-function getCached(lat, lon) {
-  const c = gj(CACHE_KEY), e = c[gridKey(lat, lon)];
-  if (!e) return null;
-  if (Date.now() - e.ts > TTL) return null;
-  return e;
-}
-function setCached(lat, lon, d) {
-  const c = gj(CACHE_KEY);
-  c[gridKey(lat, lon)] = { ...d, ts: Date.now() };
-  const ks = Object.keys(c);
-  if (ks.length > 2000) ks.sort((a,b) => c[a].ts - c[b].ts).slice(0, 500).forEach(k => delete c[k]);
-  sj(CACHE_KEY, c);
-}
+// ═══ STATE ═══
+let currentLimit=null,manualLimit=false,lastAnnouncedLimit=null;
+let currentSpeed=0,maxSpeed=0,tripDistance=0,prevPos=null;
+let tripActive=false,tripPoints=[],tripViolations=0,tripStartTime=null;
+let gpsReady=false,fetchInProg=false;
+let lastFetchLat=null,lastFetchLon=null,lastFetchTime=0;
+let radarCache=null;
+let curLat=null,curLon=null;
+let modalSelectedLimit=null;
+let leafletMap=null,miniMap=null,miniMarker=null,miniAccCircle=null;
+let lastVoiceWarningTime=0;
+let activeMetric='distance';
 
-// ═══════════════════════════════════════════
-//  ROAD DATA
-// ═══════════════════════════════════════════
-const ROAD_DEF = {
-  motorway:130, motorway_link:80, trunk:110, trunk_link:70,
-  primary:90, primary_link:70, secondary:90, secondary_link:70,
-  tertiary:90, tertiary_link:70, unclassified:90, residential:30,
-  service:20, living_street:20, track:30, road:50
-};
-const ROAD_ICONS = {
-  motorway:'🛣️', trunk:'🛤️', primary:'🚗', secondary:'🚗',
-  tertiary:'🏘️', residential:'🏡', service:'🅿️', living_street:'👣', track:'🌿'
-};
-const ROAD_CZ = {
-  motorway:'Dálnice', motorway_link:'Nájezd D', trunk:'Rychl. silnice',
-  trunk_link:'Nájezd', primary:'Silnice I. třídy', primary_link:'Odbočka',
-  secondary:'Silnice II. třídy', secondary_link:'Odbočka',
-  tertiary:'Silnice III. třídy', tertiary_link:'Odbočka',
-  residential:'Obytná zóna', unclassified:'Místní komunikace',
-  service:'Účelová kom.', living_street:'Pěší zóna', track:'Polní cesta'
-};
+const ARC=448.5;
 
-// ═══════════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════════
-let currentLimit = null;
-let manualLimit = false;
-let lastAnnouncedLimit = null;
-let currentSpeed = 0;
-let maxSpeed = 0;
-let tripDistance = 0;
-let prevPos = null;
-let tripActive = false;
-let tripPoints = []; // [{lat,lon,speed,ts}]
-let tripViolations = 0;
-let tripStartTime = null;
-let gpsReady = false;
-let fetchInProg = false;
-let lastFetchLat = null, lastFetchLon = null, lastFetchTime = 0;
-let nearestRadar = null;
-let modalSelectedLimit = null;
-let leafletMap = null;
+// ═══ VOICE ═══
+function voiceEnabled(){return document.getElementById('voiceToggle').checked}
 
-const ARC = 471;
-
-// ═══════════════════════════════════════════
-//  TTS
-// ═══════════════════════════════════════════
-function speak(text) {
-  if (!window.speechSynthesis) return;
+function speak(text){
+  if(!voiceEnabled()||!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'cs-CZ';
-  u.rate = 0.95;
-  u.pitch = 1;
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='cs-CZ';u.rate=0.92;u.pitch=1;
   window.speechSynthesis.speak(u);
 }
 
-function announceLimit(limit) {
-  if (limit === lastAnnouncedLimit) return;
-  lastAnnouncedLimit = limit;
+function announceLimit(limit){
+  if(limit===lastAnnouncedLimit)return;
+  lastAnnouncedLimit=limit;
   speak(`Pozor, maximální rychlost ${limit}`);
-  const el = document.getElementById('limitAnnounce');
-  el.textContent = `🔊 MAX RYCHLOST: ${limit} KM/H`;
+  const el=document.getElementById('limitAnnounce');
+  el.textContent=`🔊 MAX RYCHLOST: ${limit} KM/H`;
   el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3500);
+  setTimeout(()=>el.classList.remove('show'),3500);
 }
 
-// ═══════════════════════════════════════════
-//  RADAR DB
-// ═══════════════════════════════════════════
-let radarCache = null; // [{lat,lon,name,maxspeed}]
+function warnOverspeed(){
+  const now=Date.now();
+  if(now-lastVoiceWarningTime<8000)return; // max každých 8s
+  lastVoiceWarningTime=now;
+  speak('Překračuješ povolený limit!');
+}
 
-async function fetchRadarsNear(lat, lon) {
-  const KEY = `rad_${Math.round(lat*100)}_${Math.round(lon*100)}`;
-  const rd = gj(RADAR_KEY);
-  if (rd[KEY] && Date.now() - rd[KEY].ts < 3600000 * 24) {
-    radarCache = (radarCache || []);
-    const fresh = rd[KEY].data.filter(r => !radarCache.find(x => x.lat===r.lat && x.lon===r.lon));
-    radarCache.push(...fresh);
-    return;
+// ═══ HAVERSINE ═══
+function haversine(a,b,c,d){
+  const R=6371000,r=Math.PI/180,dL=(c-a)*r,dO=(d-b)*r;
+  const x=Math.sin(dL/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(dO/2)**2;
+  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
+}
+
+// ═══ RADAR DB ═══
+async function fetchRadarsNear(lat,lon){
+  const KEY=`rad_${Math.round(lat*10)}_${Math.round(lon*10)}`;
+  const rd=gj(RADAR_KEY);
+  if(rd[KEY]&&Date.now()-rd[KEY].ts<864e5){
+    mergeRadars(rd[KEY].data);renderRadarList();return;
   }
-  if (!navigator.onLine) return;
-  const q = `[out:json][timeout:10];node(around:5000,${lat},${lon})["highway"="speed_camera"];out;`;
-  try {
-    const r = await fetch('https://overpass-api.de/api/interpreter', { method:'POST', body:q, signal:AbortSignal.timeout(10000) });
-    const d = await r.json();
-    const radars = (d.elements || []).map(e => ({
-      lat: e.lat, lon: e.lon,
-      name: e.tags?.name || e.tags?.description || 'Rychlostní radar',
-      maxspeed: parseInt(e.tags?.maxspeed) || null
-    }));
-    rd[KEY] = { data: radars, ts: Date.now() };
-    const excess = Object.keys(rd).length - 500;
-    if (excess > 0) Object.keys(rd).sort((a,b)=>rd[a].ts-rd[b].ts).slice(0,excess).forEach(k=>delete rd[k]);
-    sj(RADAR_KEY, rd);
-    radarCache = radarCache || [];
-    const fresh = radars.filter(r => !radarCache.find(x => x.lat===r.lat && x.lon===r.lon));
-    radarCache.push(...fresh);
-  } catch {}
+  if(!navigator.onLine)return;
+  const q=`[out:json][timeout:12];node(around:8000,${lat},${lon})["highway"="speed_camera"];out;`;
+  try{
+    const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:q,signal:AbortSignal.timeout(12000)});
+    const d=await r.json();
+    const radars=(d.elements||[]).map(e=>({lat:e.lat,lon:e.lon,name:e.tags?.name||e.tags?.description||'Rychlostní radar',maxspeed:parseInt(e.tags?.maxspeed)||null}));
+    rd[KEY]={data:radars,ts:Date.now()};
+    const excess=Object.keys(rd).length-200;
+    if(excess>0)Object.keys(rd).sort((a,b)=>rd[a].ts-rd[b].ts).slice(0,excess).forEach(k=>delete rd[k]);
+    sj(RADAR_KEY,rd);
+    mergeRadars(radars);
+    renderRadarList();
+  }catch{}
 }
 
-function haversine(lat1, lon1, lat2, lon2) {
-  const R = 6371000, r = Math.PI/180;
-  const dLat = (lat2-lat1)*r, dLon = (lon2-lon1)*r;
-  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*r)*Math.cos(lat2*r)*Math.sin(dLon/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+function mergeRadars(list){
+  if(!radarCache)radarCache=[];
+  list.forEach(r=>{if(!radarCache.find(x=>x.lat===r.lat&&x.lon===r.lon))radarCache.push(r)});
 }
 
-function checkRadars(lat, lon) {
-  if (!radarCache || !radarCache.length) return;
-  let best = null, bestDist = Infinity;
-  for (const r of radarCache) {
-    const d = haversine(lat, lon, r.lat, r.lon);
-    if (d < bestDist) { bestDist = d; best = r; }
-  }
-  nearestRadar = best ? { ...best, dist: Math.round(bestDist) } : null;
-  const ri = document.getElementById('radarInfo');
-  const ra = document.getElementById('radarAlert');
-  if (nearestRadar && nearestRadar.dist < 500) {
-    ri.classList.add('visible');
-    document.getElementById('radarInfoDist').textContent = nearestRadar.dist + ' m';
-    document.getElementById('radarInfoName').textContent = nearestRadar.name;
-    document.getElementById('radarDist').textContent = nearestRadar.dist;
-    if (nearestRadar.dist < 300) {
-      ra.classList.add('show');
-      setTimeout(() => ra.classList.remove('show'), 4000);
-      if (nearestRadar.dist < 200 && nearestRadar.dist > 150) speak('Pozor, radar!');
+function checkRadars(lat,lon){
+  if(!radarCache?.length)return;
+  const sorted=radarCache.map(r=>({...r,dist:Math.round(haversine(lat,lon,r.lat,r.lon))})).sort((a,b)=>a.dist-b.dist);
+  const nearest=sorted[0];
+  const rn=document.getElementById('radarNear');
+  if(nearest&&nearest.dist<600){
+    rn.classList.add('visible');
+    document.getElementById('radarNearDist').textContent=nearest.dist+'m';
+    document.getElementById('radarNearName').textContent=nearest.name;
+    document.getElementById('radarBannerDist').textContent=nearest.dist;
+    if(nearest.dist<300){
+      document.getElementById('radarAlertBanner').classList.add('show');
+      setTimeout(()=>document.getElementById('radarAlertBanner').classList.remove('show'),4000);
+      if(nearest.dist<200&&nearest.dist>150)speak('Pozor, radar!');
     }
-  } else {
-    ri.classList.remove('visible');
-    ra.classList.remove('show');
+  }else{
+    rn.classList.remove('visible');
+    document.getElementById('radarAlertBanner').classList.remove('show');
   }
 }
 
-// ═══════════════════════════════════════════
-//  OSM SPEED LIMIT FETCH
-// ═══════════════════════════════════════════
-async function fetchLimit(lat, lon) {
-  if (fetchInProg || manualLimit) return;
-  const cached = getCached(lat, lon);
-  if (cached) { applyRoad(cached, true); return; }
-  if (!navigator.onLine) { fallbackCache(lat, lon); return; }
-  fetchInProg = true;
-  const q = `[out:json][timeout:8];way(around:40,${lat},${lon})["highway"];out tags 1;`;
-  try {
-    const r = await fetch('https://overpass-api.de/api/interpreter', { method:'POST', body:q, signal:AbortSignal.timeout(8000) });
-    const d = await r.json();
-    if (d.elements?.length) {
-      const prio = ['motorway','trunk','primary','secondary','tertiary','unclassified','residential','service','living_street','track'];
-      const sorted = d.elements.sort((a,b) => {
-        const ai = prio.indexOf((a.tags?.highway||'').replace(/_link$/,''));
-        const bi = prio.indexOf((b.tags?.highway||'').replace(/_link$/,''));
-        return (ai<0?99:ai)-(bi<0?99:bi);
-      });
-      const t = sorted[0].tags || {};
-      const hw = t.highway || 'road';
-      let ms = parseInt(t.maxspeed) || null;
-      if (!ms) { if(t.maxspeed==='CZ:urban')ms=50; else if(t.maxspeed==='CZ:rural')ms=90; else if(t.maxspeed==='CZ:motorway')ms=130; }
-      if (!ms) ms = ROAD_DEF[hw] || 50;
-      const entry = { highway:hw, maxspeed:ms, name:t.name||t['name:cs']||t.ref||null };
-      setCached(lat, lon, entry);
-      applyRoad(entry, false);
-    } else fallbackCache(lat, lon);
-  } catch { fallbackCache(lat, lon); }
-  finally { fetchInProg = false; lastFetchLat=lat; lastFetchLon=lon; lastFetchTime=Date.now(); }
+function renderRadarList(){
+  const list=document.getElementById('radarList');
+  if(!radarCache?.length){list.innerHTML='<div class="no-trips">📡 Žádné radary v okolí 8 km</div>';return}
+  const src=curLat!=null?radarCache.map(r=>({...r,dist:Math.round(haversine(curLat,curLon,r.lat,r.lon))})).sort((a,b)=>a.dist-b.dist):radarCache;
+  document.getElementById('radarCount').textContent=src.length+' radarů';
+  list.innerHTML=src.map(r=>`
+    <div class="radar-item">
+      <div class="radar-item-dist">${r.dist!=null?r.dist+'m':'—'}</div>
+      <div class="radar-item-info">
+        <div class="radar-item-name">${r.name}</div>
+        <div class="radar-item-coords">${r.lat?.toFixed(4)}, ${r.lon?.toFixed(4)}${r.maxspeed?' · limit '+r.maxspeed+' km/h':''}</div>
+      </div>
+      <span style="font-size:22px">📡</span>
+    </div>
+  `).join('');
 }
 
-function fallbackCache(lat, lon) {
-  const c = gj(CACHE_KEY);
-  for (let da=-3;da<=3;da++) for (let do_=-3;do_<=3;do_++) {
-    const k=`${(Math.round((lat+da*GRID)/GRID)*GRID).toFixed(4)}_${(Math.round((lon+do_*GRID)/GRID)*GRID).toFixed(4)}`;
+// ═══ OSM LIMIT ═══
+async function fetchLimit(lat,lon){
+  if(fetchInProg||manualLimit)return;
+  const cached=getCached(lat,lon);
+  if(cached){applyRoad(cached,true);return}
+  if(!navigator.onLine){fallbackCache(lat,lon);return}
+  fetchInProg=true;
+  const q=`[out:json][timeout:8];way(around:40,${lat},${lon})["highway"];out tags 1;`;
+  try{
+    const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:q,signal:AbortSignal.timeout(8000)});
+    const d=await r.json();
+    if(d.elements?.length){
+      const prio=['motorway','trunk','primary','secondary','tertiary','unclassified','residential','service','living_street','track'];
+      const s=d.elements.sort((a,b)=>{
+        const ai=prio.indexOf((a.tags?.highway||'').replace(/_link$/,''));
+        const bi=prio.indexOf((b.tags?.highway||'').replace(/_link$/,''));
+        return(ai<0?99:ai)-(bi<0?99:bi);
+      });
+      const t=s[0].tags||{};
+      const hw=t.highway||'road';
+      let ms=parseInt(t.maxspeed)||null;
+      if(!ms){if(t.maxspeed==='CZ:urban')ms=50;else if(t.maxspeed==='CZ:rural')ms=90;else if(t.maxspeed==='CZ:motorway')ms=130;}
+      if(!ms)ms=ROAD_DEF[hw]||50;
+      const entry={highway:hw,maxspeed:ms,name:t.name||t['name:cs']||t.ref||null};
+      setCached(lat,lon,entry);applyRoad(entry,false);
+    }else fallbackCache(lat,lon);
+  }catch{fallbackCache(lat,lon);}
+  finally{fetchInProg=false;lastFetchLat=lat;lastFetchLon=lon;lastFetchTime=Date.now();}
+}
+
+function fallbackCache(lat,lon){
+  const c=gj(CACHE_KEY);
+  for(let a=-3;a<=3;a++)for(let o=-3;o<=3;o++){
+    const k=`${(Math.round((lat+a*GRID)/GRID)*GRID).toFixed(4)}_${(Math.round((lon+o*GRID)/GRID)*GRID).toFixed(4)}`;
     if(c[k]){applyRoad(c[k],true);return;}
   }
 }
 
-function applyRoad(d, fromCache) {
-  const hw = d.highway || 'road';
-  const newLimit = d.maxspeed;
-  if (!manualLimit && newLimit !== currentLimit) {
-    currentLimit = newLimit;
-    announceLimit(newLimit);
-  } else if (!manualLimit) {
-    currentLimit = newLimit;
-  }
-  document.getElementById('roadIcon').textContent = ROAD_ICONS[hw.replace(/_link$/,'')] || '🚗';
-  document.getElementById('roadName').textContent = d.name || ROAD_CZ[hw] || hw;
-  document.getElementById('roadType').textContent = ROAD_CZ[hw] || hw.toUpperCase();
-  document.getElementById('cacheBadge').style.display = fromCache ? 'block' : 'none';
-  if (!manualLimit) document.getElementById('limitSrc').textContent = fromCache ? 'cache' : 'live OSM';
+function applyRoad(d,fromCache){
+  const hw=d.highway||'road';
+  const newLimit=d.maxspeed;
+  if(!manualLimit&&newLimit!==currentLimit){currentLimit=newLimit;announceLimit(newLimit);}
+  else if(!manualLimit)currentLimit=newLimit;
+  document.getElementById('roadIcon').textContent=ROAD_ICONS[hw.replace(/_link$/,'')]||'🚗';
+  document.getElementById('roadName').textContent=d.name||ROAD_CZ[hw]||hw;
+  document.getElementById('roadType').textContent=ROAD_CZ[hw]||hw.toUpperCase();
+  document.getElementById('cacheBadge').style.display=fromCache?'block':'none';
+  if(!manualLimit)document.getElementById('limitSrc').textContent=fromCache?'cache':'live OSM';
   updateLimitUI();
 }
 
-// ═══════════════════════════════════════════
-//  UI UPDATE
-// ═══════════════════════════════════════════
-function updateLimitUI() {
-  const lv = document.getElementById('limitVal');
-  const mv = document.getElementById('marginVal');
-  const lc = document.getElementById('limitCard');
-  const mc = document.getElementById('marginCard');
-  const ab = document.getElementById('alertBanner');
-  const fo = document.getElementById('flashOverlay');
-  const sn = document.getElementById('speedNum');
-  const af = document.getElementById('arcFill');
-
-  if (currentLimit != null) {
-    lv.textContent = currentLimit;
-    const margin = currentLimit - Math.round(currentSpeed);
-    mv.textContent = margin > 0 ? `+${margin}` : margin;
-    const ratio = currentSpeed / currentLimit;
-    if (ratio >= 1.05) {
-      lc.className='card clickable danger'; mc.className='card danger';
-      mv.style.color='var(--danger)'; sn.style.color='var(--danger)';
-      af.style.stroke='var(--danger)'; ab.classList.add('show');
-      fo.classList.add('flash'); setTimeout(()=>fo.classList.remove('flash'),200);
-      if (tripActive) tripViolations++;
-    } else if (ratio >= 0.9) {
-      lc.className='card clickable warn'; mc.className='card warn';
-      mv.style.color='var(--warn)'; sn.style.color='var(--warn)';
-      af.style.stroke='var(--warn)'; ab.classList.remove('show');
-    } else {
-      lc.className='card clickable'; mc.className='card';
-      mv.style.color='var(--ok)'; sn.style.color='#fff';
-      af.style.stroke='var(--accent)'; ab.classList.remove('show');
+// ═══ LIMIT UI ═══
+function updateLimitUI(){
+  const lv=document.getElementById('limitVal'),mv=document.getElementById('marginVal');
+  const lc=document.getElementById('limitCard'),mc=document.getElementById('marginCard');
+  const ab=document.getElementById('alertBanner'),fo=document.getElementById('flashOverlay');
+  const sn=document.getElementById('speedNum'),af=document.getElementById('arcFill');
+  if(currentLimit!=null){
+    lv.textContent=currentLimit;
+    const margin=currentLimit-Math.round(currentSpeed);
+    if(mv)mv.textContent=margin>0?`+${margin}`:margin;
+    const ratio=currentSpeed/currentLimit;
+    if(ratio>=1.05){
+      lc.className='card clickable danger';mc.className='card danger';
+      sn.style.color='var(--danger)';af.style.stroke='var(--danger)';
+      ab.classList.add('show');fo.classList.add('flash');setTimeout(()=>fo.classList.remove('flash'),200);
+      warnOverspeed();
+      if(tripActive)tripViolations++;
+    }else if(ratio>=0.9){
+      lc.className='card clickable warn';mc.className='card warn';
+      sn.style.color='var(--warn)';af.style.stroke='var(--warn)';ab.classList.remove('show');
+    }else{
+      lc.className='card clickable';mc.className='card';
+      sn.style.color='#fff';af.style.stroke='var(--accent)';ab.classList.remove('show');
     }
-  } else {
-    lv.textContent='—'; mv.textContent='—';
-    lc.className='card clickable'; mc.className='card';
-    sn.style.color='#fff'; af.style.stroke='var(--accent)'; ab.classList.remove('show');
+  }else{
+    lv.textContent='—';lc.className='card clickable';sn.style.color='#fff';af.style.stroke='var(--accent)';ab.classList.remove('show');
   }
 }
 
-function updateSpeedUI(speedMs, accuracy) {
-  const kmh = speedMs != null ? Math.max(0, speedMs * 3.6) : 0;
-  currentSpeed = kmh;
-  if (kmh > maxSpeed) maxSpeed = kmh;
-  document.getElementById('speedNum').textContent = Math.round(kmh);
-  const pct = Math.min(kmh / 200, 1);
-  document.getElementById('arcFill').style.strokeDashoffset = ARC * (1 - pct);
-  document.getElementById('accVal').textContent = accuracy != null ? `${Math.round(accuracy)}m` : '—';
-  document.getElementById('maxVal').textContent = Math.round(maxSpeed);
-  document.getElementById('distVal').textContent = (tripDistance / 1000).toFixed(1);
+function updateSpeedUI(speedMs,accuracy){
+  const kmh=speedMs!=null?Math.max(0,speedMs*3.6):0;
+  currentSpeed=kmh;if(kmh>maxSpeed)maxSpeed=kmh;
+  document.getElementById('speedNum').textContent=Math.round(kmh);
+  document.getElementById('arcFill').style.strokeDashoffset=ARC*(1-Math.min(kmh/200,1));
+  document.getElementById('accVal').textContent=accuracy!=null?`${Math.round(accuracy)}m`:'—';
+  document.getElementById('maxVal').textContent=Math.round(maxSpeed);
+  document.getElementById('distVal').textContent=(tripDistance/1000).toFixed(1);
   updateLimitUI();
 }
 
-// ═══════════════════════════════════════════
-//  TRIP RECORDING
-// ═══════════════════════════════════════════
-function startTrip() {
-  tripActive = true;
-  tripPoints = [];
-  tripViolations = 0;
-  tripDistance = 0;
-  maxSpeed = 0;
-  prevPos = null;
-  tripStartTime = Date.now();
-  const btn = document.getElementById('tripBtn');
-  btn.className = 'trip-btn btn-stop';
-  btn.textContent = '■ UKONČIT JÍZDU';
+// ═══ MINI MAP ═══
+function initMiniMap(){
+  miniMap=L.map('miniMap',{zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,touchZoom:false});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(miniMap);
 }
 
-function stopTrip() {
-  if (!tripActive) return;
-  tripActive = false;
-  const btn = document.getElementById('tripBtn');
-  btn.className = 'trip-btn btn-start';
-  btn.textContent = '● ZÁZNAM TRASY';
-  if (tripPoints.length < 2) return;
+function updateMiniMap(lat,lon,accuracy){
+  if(!miniMap)return;
+  const pos=[lat,lon];
+  if(!miniMarker){
+    miniMarker=L.circleMarker(pos,{radius:9,color:getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#00e5ff',fillColor:'#fff',fillOpacity:1,weight:3}).addTo(miniMap);
+    miniAccCircle=L.circle(pos,{radius:accuracy||20,color:'rgba(0,229,255,0.3)',fillColor:'rgba(0,229,255,0.08)',weight:1}).addTo(miniMap);
+    miniMap.setView(pos,16);
+  }else{
+    miniMarker.setLatLng(pos);
+    miniAccCircle.setLatLng(pos);
+    if(accuracy)miniAccCircle.setRadius(accuracy);
+    miniMap.panTo(pos,{animate:true,duration:0.5});
+  }
+}
+
+// ═══ TRIP ═══
+function startTrip(){
+  tripActive=true;tripPoints=[];tripViolations=0;tripDistance=0;maxSpeed=0;prevPos=null;tripStartTime=Date.now();
+  document.getElementById('tripBtn').className='trip-btn btn-stop';
+  document.getElementById('tripBtn').textContent='■ UKONČIT JÍZDU';
+  speak('Záznam jízdy spuštěn.');
+}
+function stopTrip(){
+  if(!tripActive)return;
+  tripActive=false;
+  document.getElementById('tripBtn').className='trip-btn btn-start';
+  document.getElementById('tripBtn').textContent='● ZÁZNAM TRASY';
+  if(tripPoints.length<2){speak('Trasa je příliš krátká.');return;}
   saveTrip();
 }
-
-function saveTrip() {
-  const duration = Math.round((Date.now() - tripStartTime) / 60000);
-  const avgSpeed = tripPoints.reduce((s,p)=>s+p.speed,0) / tripPoints.length;
-  const trip = {
-    id: Date.now(),
-    date: new Date().toLocaleString('cs-CZ'),
-    duration,
-    distance: Math.round(tripDistance),
-    maxSpeed: Math.round(maxSpeed),
-    avgSpeed: Math.round(avgSpeed),
-    violations: tripViolations,
-    points: tripPoints.map(p=>([parseFloat(p.lat.toFixed(5)),parseFloat(p.lon.toFixed(5)),Math.round(p.speed)]))
-  };
-  const diary = gj(DIARY_KEY);
-  if (!diary.trips) diary.trips = [];
+function saveTrip(){
+  const duration=Math.round((Date.now()-tripStartTime)/60000);
+  const avgSpeed=tripPoints.reduce((s,p)=>s+p.speed,0)/tripPoints.length;
+  const trip={id:Date.now(),date:new Date().toLocaleString('cs-CZ'),duration,distance:Math.round(tripDistance),maxSpeed:Math.round(maxSpeed),avgSpeed:Math.round(avgSpeed),violations:tripViolations,points:tripPoints.map(p=>[+p.lat.toFixed(5),+p.lon.toFixed(5),Math.round(p.speed)])};
+  const diary=gj(DIARY_KEY);
+  if(!diary.trips)diary.trips=[];
   diary.trips.unshift(trip);
-  if (diary.trips.length > 100) diary.trips = diary.trips.slice(0, 100);
-  sj(DIARY_KEY, diary);
-  renderDiary();
+  if(diary.trips.length>100)diary.trips=diary.trips.slice(0,100);
+  sj(DIARY_KEY,diary);
+  renderDiary();renderStats();
   speak('Jízda uložena do deníku.');
 }
 
-// ═══════════════════════════════════════════
-//  GPS
-// ═══════════════════════════════════════════
-let watchId = null;
-function startGPS() {
-  watchId = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy:true, maximumAge:1000, timeout:15000 });
+// ═══ GPS ═══
+let watchId=null;
+function startGPS(){
+  document.getElementById('statusDot').className='status-dot searching';
+  document.getElementById('statusLabel').textContent='HLEDÁ';
+  watchId=navigator.geolocation.watchPosition(onPos,onErr,{enableHighAccuracy:true,maximumAge:1000,timeout:15000});
 }
 
-function onPos(pos) {
-  const { latitude:lat, longitude:lon, speed, accuracy } = pos.coords;
-  gpsReady = true;
-  document.getElementById('statusDot').className = 'status-dot active';
-  document.getElementById('statusLabel').textContent = 'GPS';
-  document.getElementById('tripBtn').className = 'trip-btn ' + (tripActive ? 'btn-stop' : 'btn-start');
-  if (!tripActive) document.getElementById('tripBtn').textContent = '● ZÁZNAM TRASY';
-
-  updateSpeedUI(speed, accuracy);
-
-  // Trip tracking
-  if (tripActive) {
-    const kmh = speed != null ? speed * 3.6 : 0;
-    tripPoints.push({ lat, lon, speed: kmh });
-    if (prevPos) tripDistance += haversine(prevPos.lat, prevPos.lon, lat, lon);
-    prevPos = { lat, lon };
+function onPos(pos){
+  const{latitude:lat,longitude:lon,speed,accuracy}=pos.coords;
+  curLat=lat;curLon=lon;gpsReady=true;
+  document.getElementById('statusDot').className='status-dot active';
+  document.getElementById('statusLabel').textContent='GPS';
+  if(!tripActive){document.getElementById('tripBtn').className='trip-btn btn-start';document.getElementById('tripBtn').textContent='● ZÁZNAM TRASY';}
+  updateSpeedUI(speed,accuracy);
+  updateMiniMap(lat,lon,accuracy);
+  if(tripActive){
+    const kmh=speed!=null?speed*3.6:0;
+    tripPoints.push({lat,lon,speed:kmh});
+    if(prevPos)tripDistance+=haversine(prevPos.lat,prevPos.lon,lat,lon);
+    prevPos={lat,lon};
   }
-
-  // OSM fetch
-  const kmh = speed != null ? speed * 3.6 : 0;
-  const interval = kmh > 5 ? 5000 : 15000;
-  const moved = lastFetchLat != null ? haversine(lat,lon,lastFetchLat,lastFetchLon) : 999;
-  if (Date.now() - lastFetchTime > interval || moved > 80) fetchLimit(lat, lon);
-
-  // Radars
-  checkRadars(lat, lon);
-  if (moved > 1000 || !radarCache) fetchRadarsNear(lat, lon);
+  const kmh=speed!=null?speed*3.6:0;
+  const interval=kmh>5?5000:15000;
+  const moved=lastFetchLat!=null?haversine(lat,lon,lastFetchLat,lastFetchLon):999;
+  if(Date.now()-lastFetchTime>interval||moved>80)fetchLimit(lat,lon);
+  checkRadars(lat,lon);
+  if(moved>1200||!radarCache)fetchRadarsNear(lat,lon);
 }
 
-function onErr(e) {
-  document.getElementById('statusDot').className = 'status-dot error';
-  document.getElementById('statusLabel').textContent = 'CHYBA';
-  document.getElementById('roadName').textContent = e.code===1 ? 'Přístup k GPS odepřen' : 'GPS nedostupná';
+function onErr(e){
+  document.getElementById('statusDot').className='status-dot error';
+  document.getElementById('statusLabel').textContent='CHYBA';
+  document.getElementById('roadName').textContent=e.code===1?'Přístup k GPS odepřen':'GPS nedostupná';
 }
 
-// ═══════════════════════════════════════════
-//  TRIP BUTTON
-// ═══════════════════════════════════════════
-document.getElementById('tripBtn').addEventListener('click', () => {
-  if (!gpsReady) return;
-  if (tripActive) stopTrip(); else startTrip();
-});
+// ═══ SHARE ═══
+function openShare(){
+  if(curLat==null){alert('GPS ještě nemá signál, počkej chvíli.');return;}
+  const url=`https://www.google.com/maps?q=${curLat.toFixed(6)},${curLon.toFixed(6)}&z=15`;
+  document.getElementById('shareUrl').textContent=url;
+  document.getElementById('waSendBtn').onclick=()=>window.open(`whatsapp://send?text=Moje+aktuální+poloha:+${encodeURIComponent(url)}`);
+  document.getElementById('copyShareBtn').onclick=()=>{navigator.clipboard?.writeText(url).then(()=>alert('Odkaz zkopírován!')).catch(()=>{});};
+  document.getElementById('shareModal').classList.add('open');
+}
+document.getElementById('shareClose').addEventListener('click',()=>document.getElementById('shareModal').classList.remove('open'));
+document.getElementById('shareModal').addEventListener('click',e=>{if(e.target===document.getElementById('shareModal'))document.getElementById('shareModal').classList.remove('open');});
 
-// ═══════════════════════════════════════════
-//  MANUAL LIMIT MODAL
-// ═══════════════════════════════════════════
-document.getElementById('limitCard').addEventListener('click', () => {
-  modalSelectedLimit = currentLimit;
-  document.querySelectorAll('.limit-opt').forEach(el => {
-    el.classList.toggle('selected', parseInt(el.dataset.v) === currentLimit);
-  });
+// ═══ LIMIT MODAL ═══
+document.getElementById('limitCard').addEventListener('click',()=>{
+  modalSelectedLimit=currentLimit;
+  document.querySelectorAll('.limit-opt').forEach(el=>el.classList.toggle('selected',parseInt(el.dataset.v)===currentLimit));
   document.getElementById('limitModal').classList.add('open');
 });
-document.querySelectorAll('.limit-opt').forEach(el => {
-  el.addEventListener('click', () => {
-    document.querySelectorAll('.limit-opt').forEach(x=>x.classList.remove('selected'));
-    el.classList.add('selected');
-    modalSelectedLimit = parseInt(el.dataset.v);
-  });
-});
-document.getElementById('modalCancel').addEventListener('click', () => {
-  document.getElementById('limitModal').classList.remove('open');
-});
-document.getElementById('modalConfirm').addEventListener('click', () => {
-  if (modalSelectedLimit) {
-    const changed = modalSelectedLimit !== currentLimit;
-    currentLimit = modalSelectedLimit;
-    manualLimit = true;
-    document.getElementById('limitVal').textContent = currentLimit;
-    document.getElementById('limitSrc').textContent = 'manuální';
-    if (changed) announceLimit(currentLimit);
+document.querySelectorAll('.limit-opt').forEach(el=>el.addEventListener('click',()=>{
+  document.querySelectorAll('.limit-opt').forEach(x=>x.classList.remove('selected'));
+  el.classList.add('selected');modalSelectedLimit=parseInt(el.dataset.v);
+}));
+document.getElementById('modalCancel').addEventListener('click',()=>document.getElementById('limitModal').classList.remove('open'));
+document.getElementById('modalConfirm').addEventListener('click',()=>{
+  if(modalSelectedLimit){
+    const changed=modalSelectedLimit!==currentLimit;
+    currentLimit=modalSelectedLimit;manualLimit=true;
+    document.getElementById('limitVal').textContent=currentLimit;
+    document.getElementById('limitSrc').textContent='manuální';
+    if(changed)announceLimit(currentLimit);
     updateLimitUI();
   }
   document.getElementById('limitModal').classList.remove('open');
 });
-document.getElementById('limitModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('limitModal')) document.getElementById('limitModal').classList.remove('open');
-});
+document.getElementById('limitModal').addEventListener('click',e=>{if(e.target===document.getElementById('limitModal'))document.getElementById('limitModal').classList.remove('open');});
 
-// ═══════════════════════════════════════════
-//  DIARY
-// ═══════════════════════════════════════════
-function fmtDur(min) {
-  if (min < 60) return `${min} min`;
-  return `${Math.floor(min/60)}h ${min%60}m`;
-}
-function fmtDist(m) {
-  return m < 1000 ? `${m} m` : `${(m/1000).toFixed(1)} km`;
-}
+// ═══ TRIP BTN ═══
+document.getElementById('tripBtn').addEventListener('click',()=>{if(!gpsReady)return;if(tripActive)stopTrip();else startTrip();});
 
-function renderDiary() {
-  const list = document.getElementById('tripList');
-  const diary = gj(DIARY_KEY);
-  const trips = diary.trips || [];
-  if (!trips.length) {
-    list.innerHTML = '<div class="no-trips">📋 Zatím žádné jízdy<br><br>Spusť záznam trasy a jel!</div>';
-    return;
-  }
-  list.innerHTML = trips.map(t => `
+// ═══ DIARY ═══
+function fmtDur(m){return m<60?`${m} min`:`${Math.floor(m/60)}h ${m%60}m`}
+function fmtDist(m){return m<1000?`${m} m`:`${(m/1000).toFixed(1)} km`}
+function renderDiary(){
+  const list=document.getElementById('tripList');
+  const trips=(gj(DIARY_KEY).trips||[]);
+  if(!trips.length){list.innerHTML='<div class="no-trips">📋 Zatím žádné jízdy<br><br>Spusť záznam trasy!</div>';return;}
+  list.innerHTML=trips.map(t=>`
     <div class="trip-item" onclick="openTripDetail(${t.id})">
       <div class="trip-header">
-        <div>
-          <div style="font-size:13px;font-weight:600">${t.date}</div>
-          <div class="trip-date">${fmtDist(t.distance)} · ${fmtDur(t.duration)}</div>
-        </div>
+        <div><div style="font-size:13px;font-weight:600">${t.date}</div><div class="trip-date">${fmtDist(t.distance)} · ${fmtDur(t.duration)}</div></div>
         <div class="trip-duration">${t.duration} MIN</div>
       </div>
       <div class="trip-stats">
@@ -734,93 +757,150 @@ function renderDiary() {
         <div class="trip-stat"><div class="ts-val ${t.violations>0?'ts-warn':''}">${t.violations}</div><div class="ts-lbl">Překročení</div></div>
         <div class="trip-stat"><div class="ts-val">${(t.distance/1000).toFixed(1)}</div><div class="ts-lbl">km</div></div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
+document.getElementById('clearBtn').addEventListener('click',()=>{if(confirm('Smazat celý deník?')){sj(DIARY_KEY,{});renderDiary();renderStats();}});
 
-document.getElementById('clearBtn').addEventListener('click', () => {
-  if (confirm('Smazat celý deník?')) { sj(DIARY_KEY, {}); renderDiary(); }
-});
-
-// ═══════════════════════════════════════════
-//  TRIP DETAIL MAP
-// ═══════════════════════════════════════════
-function openTripDetail(id) {
-  const diary = gj(DIARY_KEY);
-  const trip = (diary.trips || []).find(t => t.id === id);
-  if (!trip) return;
-
-  document.getElementById('detailTitle').textContent = trip.date;
-  document.getElementById('detailStats').innerHTML = `
+// ═══ TRIP DETAIL ═══
+function openTripDetail(id){
+  const trip=(gj(DIARY_KEY).trips||[]).find(t=>t.id===id);if(!trip)return;
+  document.getElementById('detailTitle').textContent=trip.date;
+  document.getElementById('detailStats').innerHTML=`
     <div class="ds"><div class="ds-val">${trip.maxSpeed}</div><div class="ds-lbl">Max km/h</div></div>
     <div class="ds"><div class="ds-val">${trip.avgSpeed}</div><div class="ds-lbl">Prům km/h</div></div>
     <div class="ds"><div class="ds-val">${(trip.distance/1000).toFixed(1)}</div><div class="ds-lbl">km</div></div>
-    <div class="ds"><div class="ds-val" style="color:${trip.violations>0?'var(--warn)':'var(--ok)'}">${trip.violations}</div><div class="ds-lbl">Překročení</div></div>
-  `;
+    <div class="ds"><div class="ds-val" style="color:${trip.violations>0?'var(--warn)':'var(--ok)'}">${trip.violations}</div><div class="ds-lbl">Překročení</div></div>`;
   document.getElementById('detailOverlay').classList.add('open');
-
-  // Init/destroy map
-  setTimeout(() => {
-    if (leafletMap) { leafletMap.remove(); leafletMap = null; }
-    leafletMap = L.map('tripMap', { zoomControl:true, attributionControl:false });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19 }).addTo(leafletMap);
-
-    const pts = trip.points.map(p => [p[0], p[1]]);
-    const maxS = trip.points.reduce((m,p)=>Math.max(m,p[2]),0);
-
-    // Color polyline by speed
-    for (let i = 0; i < pts.length - 1; i++) {
-      const s = trip.points[i][2];
-      const col = s > 100 ? '#ff1744' : s > 70 ? '#ff9100' : '#00e5ff';
-      L.polyline([pts[i], pts[i+1]], { color:col, weight:4, opacity:.85 }).addTo(leafletMap);
+  setTimeout(()=>{
+    if(leafletMap){leafletMap.remove();leafletMap=null;}
+    leafletMap=L.map('tripMap',{zoomControl:true,attributionControl:false});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(leafletMap);
+    const pts=trip.points.map(p=>[p[0],p[1]]);
+    const maxS=trip.points.reduce((m,p)=>Math.max(m,p[2]),0);
+    for(let i=0;i<pts.length-1;i++){
+      const s=trip.points[i][2];
+      const col=s>100?'#ff1744':s>70?'#ff9100':'#00e5ff';
+      L.polyline([pts[i],pts[i+1]],{color:col,weight:4,opacity:.85}).addTo(leafletMap);
     }
-
-    // Start/end markers
-    if (pts.length) {
-      L.circleMarker(pts[0], { radius:8, color:'#00e676', fillColor:'#00e676', fillOpacity:1, weight:2 })
-        .bindPopup('Start').addTo(leafletMap);
-      L.circleMarker(pts[pts.length-1], { radius:8, color:'#ff1744', fillColor:'#ff1744', fillOpacity:1, weight:2 })
-        .bindPopup('Cíl').addTo(leafletMap);
-      leafletMap.fitBounds(pts, { padding:[20,20] });
+    if(pts.length){
+      L.circleMarker(pts[0],{radius:8,color:'#00e676',fillColor:'#00e676',fillOpacity:1,weight:2}).bindPopup('Start').addTo(leafletMap);
+      L.circleMarker(pts[pts.length-1],{radius:8,color:'#ff1744',fillColor:'#ff1744',fillOpacity:1,weight:2}).bindPopup('Cíl').addTo(leafletMap);
+      leafletMap.fitBounds(pts,{padding:[20,20]});
     }
-  }, 100);
+  },150);
+}
+document.getElementById('detailBack').addEventListener('click',()=>{document.getElementById('detailOverlay').classList.remove('open');if(leafletMap){leafletMap.remove();leafletMap=null;}});
+
+// ═══ WEEKLY STATS ═══
+function getLast7Days(){
+  const days=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);
+    days.push(d.toLocaleDateString('cs-CZ',{day:'2-digit',month:'2-digit'}));
+  }
+  return days;
 }
 
-document.getElementById('detailBack').addEventListener('click', () => {
-  document.getElementById('detailOverlay').classList.remove('open');
-  if (leafletMap) { leafletMap.remove(); leafletMap = null; }
-});
+function renderStats(){
+  const trips=gj(DIARY_KEY).trips||[];
+  const days=getLast7Days();
+  const byDay={};
+  days.forEach(d=>byDay[d]={distance:0,maxSpeed:0,violations:0,count:0});
+  trips.forEach(t=>{
+    const d=new Date(t.id);
+    const key=d.toLocaleDateString('cs-CZ',{day:'2-digit',month:'2-digit'});
+    if(byDay[key]!==undefined){
+      byDay[key].distance+=t.distance/1000;
+      byDay[key].maxSpeed=Math.max(byDay[key].maxSpeed,t.maxSpeed);
+      byDay[key].violations+=t.violations;
+      byDay[key].count++;
+    }
+  });
+  const vals=days.map(d=>byDay[d][activeMetric]||0);
+  drawChart(days.map(d=>d.slice(0,5)),vals);
+  // totals (all time)
+  const allTrips=trips;
+  document.getElementById('wtKm').textContent=(allTrips.reduce((s,t)=>s+t.distance,0)/1000).toFixed(0);
+  document.getElementById('wtTrips').textContent=allTrips.length;
+  document.getElementById('wtMax').textContent=allTrips.length?Math.max(...allTrips.map(t=>t.maxSpeed)):0;
+  document.getElementById('wtViol').textContent=allTrips.reduce((s,t)=>s+t.violations,0);
+}
 
-// ═══════════════════════════════════════════
-//  TABS
-// ═══════════════════════════════════════════
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    const target = tab.dataset.page;
-    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === tab));
-    document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === target));
-    if (target === 'diaryPage') renderDiary();
+function drawChart(labels,vals){
+  const canvas=document.getElementById('weekChart');
+  const ctx=canvas.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const W=canvas.parentElement.clientWidth-32;
+  const H=140;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+  const max=Math.max(...vals,1);
+  const pad=30,barW=(W-pad)/(labels.length)*0.6,gap=(W-pad)/(labels.length);
+  const accent='#00e5ff',dim='rgba(255,255,255,0.1)';
+  // grid
+  for(let i=0;i<=4;i++){
+    const y=H-20-(i/4)*(H-30);
+    ctx.strokeStyle=dim;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W,y);ctx.stroke();
+  }
+  labels.forEach((lbl,i)=>{
+    const x=pad+i*gap+(gap-barW)/2;
+    const bh=Math.max(2,(vals[i]/max)*(H-30));
+    const y=H-20-bh;
+    // bar
+    const grad=ctx.createLinearGradient(0,y,0,H-20);
+    grad.addColorStop(0,accent);grad.addColorStop(1,'rgba(0,229,255,0.2)');
+    ctx.fillStyle=grad;
+    ctx.beginPath();ctx.roundRect(x,y,barW,bh,4);ctx.fill();
+    // value
+    if(vals[i]>0){
+      ctx.fillStyle='#fff';ctx.font=`bold ${dpr>1?9:8}px Rajdhani,sans-serif`;ctx.textAlign='center';
+      ctx.fillText(activeMetric==='distance'?vals[i].toFixed(1):Math.round(vals[i]),x+barW/2,y-4);
+    }
+    // label
+    ctx.fillStyle='rgba(255,255,255,0.4)';ctx.font=`${dpr>1?9:8}px Rajdhani,sans-serif`;ctx.textAlign='center';
+    ctx.fillText(lbl,x+barW/2,H-4);
+  });
+}
+
+document.querySelectorAll('.week-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.week-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    activeMetric=tab.dataset.metric;
+    renderStats();
   });
 });
 
-// ═══════════════════════════════════════════
-//  START SCREEN
-// ═══════════════════════════════════════════
-document.getElementById('startBtn').addEventListener('click', () => {
-  if (!navigator.geolocation) { alert('GPS není podporována v tomto prohlížeči.'); return; }
-  document.getElementById('startScreen').classList.add('hidden');
-  document.getElementById('statusDot').className = 'status-dot searching';
-  document.getElementById('statusLabel').textContent = 'HLEDÁ';
-  document.getElementById('roadName').textContent = 'Čekám na GPS signál...';
-  // Spustit GPS až po kliknutí = prohlížeč ukáže dialog o povolení
-  startGPS();
-  // Request wake lock
-  if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(()=>{});
+// ═══ TABS ═══
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    const target=tab.dataset.page;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===tab));
+    document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===target));
+    if(target==='diaryPage')renderDiary();
+    if(target==='statsPage')renderStats();
+    if(target==='radarsPage')renderRadarList();
+  });
 });
 
-// Offline badge
-function chkOnline() { document.getElementById('offlineBadge').style.display = navigator.onLine ? 'none' : 'block'; }
-window.addEventListener('online', chkOnline); window.addEventListener('offline', chkOnline); chkOnline();
+// ═══ START ═══
+document.getElementById('startBtn').addEventListener('click',()=>{
+  if(!navigator.geolocation){alert('GPS není podporována.');return;}
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('roadName').textContent='Čekám na GPS signál...';
+  initMiniMap();
+  startGPS();
+  if('wakeLock'in navigator)navigator.wakeLock.request('screen').catch(()=>{});
+});
+
+// ═══ OFFLINE ═══
+function chkOnline(){document.getElementById('offlineBadge').style.display=navigator.onLine?'none':'block';}
+window.addEventListener('online',chkOnline);window.addEventListener('offline',chkOnline);chkOnline();
+
+// init
+renderDiary();renderStats();
 </script>
 </body>
 </html>
